@@ -90,6 +90,14 @@ for universe_name, uni_data in universes.items():
     if 'blend_weights' in uni_data:
         w = uni_data['blend_weights']
         st.caption(f"Blending weights: Trend={w[0]:.2f}, Mean-Reversion={w[1]:.2f}, Volatility={w[2]:.2f}")
+
+    # --- New: Dropdown table for all ETFs ---
+    all_scores = uni_data.get("all_scores", {})
+    if all_scores:
+        with st.expander("📊 Full ranking (all ETFs)"):
+            df_all = pd.DataFrame(list(all_scores.items()), columns=["ETF", "Score"])
+            df_all = df_all.sort_values("Score", ascending=False)
+            st.dataframe(df_all, use_container_width=True, hide_index=True)
     st.divider()
 
 st.caption("Each day, a zero‑sum game compares recent Sharpe of the three heuristics; the Nash equilibrium gives probabilities used to blend their signals. PID controller can optionally smooth weight changes.")
